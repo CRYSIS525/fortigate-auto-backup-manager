@@ -1,19 +1,45 @@
-# ============================================
-# FortiGate Backup Rotation Script
-# ============================================
+# =========================
+# FortiGate Backup Versioning Script
+# =========================
 
-$BackupPath = "C:\Backups\FortiGate"
-$RetentionDays = 30
+$basePath = "YOUR PATH"
+$src = Join-Path $basePath "fortigate_backup.conf"
+$date = Get-Date -Format "dd-MM-yyyy_HH-mm"
+$dest = Join-Path $basePath "FortiGate_$date.conf"
+$logFile = Join-Path $basePath "backup_rotation.log"
 
-Write-Output "Starting backup cleanup..."
-
-Get-ChildItem -Path $BackupPath -Filter *.conf |
-Where-Object {
-    $_.LastWriteTime -lt (Get-Date).AddDays(-$RetentionDays)
-} |
-ForEach-Object {
-    Write-Output "Deleting old backup: $($_.Name)"
-    Remove-Item $_.FullName -Force
+# Ensure backup directory exists
+if (!(Test-Path $basePath)) {
+    New-Item -ItemType Directory -Path $basePath | Out-Null
 }
 
-Write-Output "Backup cleanup completed."
+# Check source file
+if (!(Test-Path $src)) {
+    Add-Content $logFile "$(Get-Date) ❌ Source backup file not found"
+    exit 1
+}
+
+# Check file size (avoid empty backup)
+$fileSizeKB = (Get-Item $src).Length / 1KB
+if ($fileSizeKB -lt 10) {
+    Add-Content $logFile "$(Get-Date) ❌ Backup file too small ($fileSizeKB KB) – possible failure"
+    exit 1
+}
+
+# Copy backup with timestamp
+Copy-Item $src $dest -Force
+
+# Verify copy
+if (Test-Path $dest) {
+    Add-Content $logFile "$(Get-Date) ✅ Backup archived successfully: $(Split-Path $dest -Leaf)"
+} else {
+    Add-Content $logFile "$(Get-Date) ❌ Backup copy failed"
+    exit 1
+}
+
+# Retention: keep only last 30 days
+Get-ChildItem $basePath -Filter "FortiGate_*.conf" |
+Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) } |
+Remove-Item -Force
+
+Add-Content $logFile "$(Get-Date) 🧹 Old backups cleaned (30-day retention)"
