@@ -1,94 +1,60 @@
-# 🔐 FortiGate Auto Backup Manager
+# 🔐 FortiGate Backup Automation Suite
 
-**Enterprise-grade automation tool for secure and consistent FortiGate configuration backups with retention control and audit-ready logging.**
+**Enterprise-grade automation system for FortiGate configuration backups with FTP integration, retention management, and email notification.**
 
 ---
 
 ## 📌 Overview
 
-FortiGate Auto Backup Manager is designed to automate the process of backing up firewall configurations in production environments.
+This project provides a complete automated solution for managing FortiGate firewall backups in a production environment.
 
-It ensures:
+It integrates:
 
-* Consistent backup cycles
-* Centralized storage
-* Automated retention cleanup
-* Reduced operational risk
+* FortiGate Automation Stitch (backup generation)
+* FTP Server (centralized storage)
+* Windows Task Scheduler (processing layer)
+* PowerShell Scripts (rotation and email notification)
 
 ---
 
 ## 🚀 Key Features
 
-* **Automated Backup Execution**
-  Scheduled configuration backups without manual intervention
-
-* **Retention Policy Management**
-  Automatically removes outdated backups based on defined duration
-
-* **Structured Backup Storage**
-  Organized, timestamp-based file naming for easy tracking
-
-* **Comprehensive Logging**
-  Tracks all backup and cleanup operations for audit purposes
-
-* **Secure Credential Handling**
-  Uses environment variables to protect sensitive information
+* 📅 Automated daily backup generation
+* 📡 FTP-based centralized storage
+* ♻️ Backup rotation with retention policy
+* 📧 Automated email notification with latest backup
+* 📜 Structured logging and monitoring
+* 🔐 Secure and scalable design
 
 ---
 
-## 🏢 Production Use Case
+## 🔄 Complete Automation Workflow
 
-This solution is built for real-world infrastructure where:
+This project implements an end-to-end automated backup pipeline:
 
-* Firewall configurations are critical assets
-* Manual backups are unreliable
-* Compliance and audit requirements exist
+1. **FortiGate Automation Stitch**
 
-It enables teams to maintain:
+   * Generates daily configuration backup
 
-* Operational continuity
-* Disaster recovery readiness
-* Configuration traceability
+2. **FTP Storage Layer**
 
----
+   * Backup is uploaded to a centralized FTP server
 
-## 📊 Example Log Output
+3. **Windows Task Scheduler**
 
-```
-Backup archived successfully: FortiGate_22-12-2025_15-56.conf
-Old backups cleaned (30-day retention)
-```
+   * Executes rotation and email scripts
+
+4. **PowerShell Automation**
+
+   * Cleans old backups
+   * Sends latest backup via email
 
 ---
 
-## ⚙️ Installation
-
-```bash
-git clone https://github.com/your-username/fortigate-auto-backup-manager.git
-cd fortigate-auto-backup-manager
-pip install -r requirements.txt
-```
-
----
-
-## 🔑 Configuration
-
-Create a `.env` file in the root directory:
+## 🧠 Architecture Overview
 
 ```
-FGT_HOST=your-firewall-ip
-FGT_USERNAME=admin
-FGT_PASSWORD=your-password
-BACKUP_PATH=./backups
-RETENTION_DAYS=30
-```
-
----
-
-## ▶️ Usage
-
-```bash
-python main.py
+FortiGate → FTP Server → Windows Scheduler → Rotation → Email Notification
 ```
 
 ---
@@ -96,44 +62,129 @@ python main.py
 ## 📁 Project Structure
 
 ```
-fortigate-auto-backup-manager/
+fortigate-backup-automation-suite/
 │
-├── main.py              # Entry point
-├── backup.py            # Backup logic
-├── config.py            # Configuration handler
-├── requirements.txt     # Dependencies
-├── sample.env           # Sample environment file
-├── .gitignore           # Ignore sensitive files
-└── README.md            # Documentation
+├── fortigate/        # FortiGate automation configuration guide
+│   └── automation-stitch.md
+│
+├── scripts/          # PowerShell automation scripts
+│   ├── rotate_backup.ps1
+│   └── send_backup_mail.ps1
+│
+├── scheduler/        # Windows Task Scheduler configurations
+│   ├── rotate_backup_task.xml
+│   └── backup_mail_task.xml
+│
+├── config/           # Sample configuration (no real credentials)
+│   └── sample.env
+│
+├── logs/             # Sample output logs
+│   └── sample.log
+│
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1️⃣ FortiGate Configuration
+
+Follow the detailed guide:
+
+👉 `fortigate/automation-stitch.md`
+
+This includes:
+
+* Creating backup action
+* Creating scheduled trigger
+* Creating automation stitch
+
+---
+
+### 2️⃣ FTP Server Setup
+
+* Configure FTP server for backup storage
+* Ensure access from FortiGate and Windows system
+* Use secure credentials
+
+---
+
+### 3️⃣ Windows Scheduler Setup
+
+Import the provided XML tasks:
+
+* `scheduler/rotate_backup_task.xml`
+* `scheduler/backup_mail_task.xml`
+
+These will:
+
+* Run backup rotation
+* Send email notifications
+
+---
+
+### 4️⃣ Script Configuration
+
+Update paths inside scripts:
+
+```powershell
+$BackupPath = "C:\Backups\FortiGate"
+```
+
+Ensure:
+
+* Backup directory exists
+* Proper permissions are set
+
+---
+
+## 📊 Sample Output
+
+```
+Backup archived successfully: FortiGate_01-01-2026_09-03.conf
+Old backups cleaned (30-day retention)
+Email sent successfully
 ```
 
 ---
 
 ## 🔐 Security Considerations
 
-* Do not commit `.env` or backup files
-* Store credentials securely
-* Restrict access to backup directory
+* Do not expose FTP credentials
+* Do not upload real configuration files
+* Use environment variables for sensitive data
+* Restrict access to backup storage
 
 ---
 
-## 📈 Roadmap
+## 🎯 Key Highlights
 
-* Email notifications for backup status
-* Multi-device support
-* Dashboard-based monitoring
+* Fully automated backup lifecycle
+* Separation of concerns (Firewall vs Processing)
+* Production-ready architecture
+* Scalable and maintainable design
+
+---
+
+## 🚀 Future Enhancements
+
+* SFTP / FTPS support
+* Cloud backup integration (AWS / Azure)
 * Backup integrity validation
+* Real-time alerting system
 
 ---
 
-## 👨‍💻 Maintainer
+## 👨‍💻 Author
 
-Maintained by a system administrator focused on network security, automation, and enterprise infrastructure reliability.
+Built by a system administrator working on real-world network infrastructure and security automation.
 
 ---
 
-## ⭐ Contribution
+## ⭐ Support
 
-Contributions, improvements, and suggestions are welcome.
+If you find this project useful, consider giving it a star ⭐
 
 ---
