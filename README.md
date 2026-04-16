@@ -30,8 +30,6 @@ It integrates:
 
 ## 🔄 Complete Automation Workflow
 
-This project implements an end-to-end automated backup pipeline:
-
 1. **FortiGate Automation Stitch**
 
    * Generates daily configuration backup
@@ -64,24 +62,17 @@ FortiGate → FTP Server → Windows Scheduler → Rotation → Email Notificati
 ```
 fortigate-backup-automation-suite/
 │
-├── fortigate/        # FortiGate automation configuration guide
+├── fortigate/
 │   └── automation-stitch.md
 │
-├── scripts/          # PowerShell automation scripts
+├── scripts/
 │   ├── rotate_backup.ps1
 │   └── send_backup_mail.ps1
 │
-├── scheduler/        # Windows Task Scheduler configurations
+├── scheduler/
 │   ├── rotate_backup_task.xml
 │   └── backup_mail_task.xml
 │
-├── config/           # Sample configuration (no real credentials)
-│   └── sample.env
-│
-├── logs/             # Sample output logs
-│   └── sample.log
-│
-├── requirements.txt
 └── README.md
 ```
 
@@ -91,43 +82,32 @@ fortigate-backup-automation-suite/
 
 ### 1️⃣ FortiGate Configuration
 
-Follow the detailed guide:
+Follow the guide:
 
 👉 `fortigate/automation-stitch.md`
-
-This includes:
-
-* Creating backup action
-* Creating scheduled trigger
-* Creating automation stitch
 
 ---
 
 ### 2️⃣ FTP Server Setup
 
 * Configure FTP server for backup storage
-* Ensure access from FortiGate and Windows system
+* Ensure connectivity from FortiGate
 * Use secure credentials
 
 ---
 
 ### 3️⃣ Windows Scheduler Setup
 
-Import the provided XML tasks:
+Import tasks:
 
 * `scheduler/rotate_backup_task.xml`
 * `scheduler/backup_mail_task.xml`
-
-These will:
-
-* Run backup rotation
-* Send email notifications
 
 ---
 
 ### 4️⃣ Script Configuration
 
-Update paths inside scripts:
+Update backup path:
 
 ```powershell
 $BackupPath = "C:\Backups\FortiGate"
@@ -136,7 +116,7 @@ $BackupPath = "C:\Backups\FortiGate"
 Ensure:
 
 * Backup directory exists
-* Proper permissions are set
+* Proper permissions are configured
 
 ---
 
@@ -154,7 +134,7 @@ Email sent successfully
 
 * Do not expose FTP credentials
 * Do not upload real configuration files
-* Use environment variables for sensitive data
+* Store sensitive data securely
 * Restrict access to backup storage
 
 ---
@@ -162,8 +142,8 @@ Email sent successfully
 ## 🎯 Key Highlights
 
 * Fully automated backup lifecycle
-* Separation of concerns (Firewall vs Processing)
 * Production-ready architecture
+* Clean separation of responsibilities
 * Scalable and maintainable design
 
 ---
@@ -171,15 +151,15 @@ Email sent successfully
 ## 🚀 Future Enhancements
 
 * SFTP / FTPS support
-* Cloud backup integration (AWS / Azure)
+* Cloud integration (AWS / Azure)
 * Backup integrity validation
-* Real-time alerting system
+* Real-time alerting
 
 ---
 
 ## 👨‍💻 Author
 
-Built by a system administrator working on real-world network infrastructure and security automation.
+Built by a system administrator working on real-world network infrastructure and automation.
 
 ---
 
